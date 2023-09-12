@@ -8,3 +8,92 @@ c.f 대소문자 구분 -> 1. var binary로 데이터 타입 사용 2. varchar b
 -- ifnull(a, b) -> a가 null이면 b 
 -- 논리연산 주의 (p.30)
 -- escape: like '__#%' escape:'#' 
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+## SQL 식별자
+-- 이름: 데이터베이스 이름, 테이블, 컬럼명, 제약
+-- 예약어 사용 금지
+-- 길이 제한: 30자 이내
+-- 영문자, 숫자, 한글 사용(일부 고객 요청)
+-- 대소문자 구분 X: 자동으로 대문자로 변환 처리
+	>> 테이블 생성 시에 예제 설명
+	
+## SQL 구분
+-- DDL (Data Definition Language)
+	>>  데이터 정의어
+	>> 객체 생성, 변경, 삭제
+	>> 객체: 테이블, 인덱스, 뷰, 함수, 프로시저 등
+	>> 생성: create table, view, index, ...
+	>> 변경: alter table
+	>> 삭제: drop table
+-- DML (Data Maniputlation Language)
+	>> 테이블 데이터 조작어
+	>> 레코드 추가: insert
+	>> 레코드 변경: update (객체 변경 -> alter, 레코드 변경 -> update)
+	>> 레코드 삭제: delete (객체 삭제 -> drop, 레코드 삭제 -> delete)
+	
+	>> 레코드 조회(DQL: Data Query Language): select
+	
+-- TCL (Transaction Control Language)
+	>> 트랜잭션 제어
+	>> 트랜잭션: 데이터베이스의 논리적인 작업(업무) 단위
+	>> commit, rollback, savepoint
+	>> 예시: 계좌이체
+	
+-- DCL (Data Control Language)
+	>> 데이터베이스의 데이터 제어
+	>> 사용자 관리, 권한 관리, 접근 제약 등
+	>> grant, revoke
+	
+
+## 레코드 조회(DQL: Data Query Language): select 구문
+1. 기본 형식: 
+	<mysql>
+	select * | distinct 컬럼명1 ALIAS, 컬럼명2 "Alias Name",... | 수식 "alias"
+		| 함수명() | sub-query;
+		
+	<oracle>	
+	select
+	from 테이블명;
+	
+	-- select 구문을 위한 가상의 테이블: dual;
+	
+2. 전체형식
+	select 조회항목
+	from 테이블명1 "테이블alias", 테이블명x "테이블alias"
+	where 검색조건
+	group by 그룹핑컬럼명1, 그룹핑컬럼명x
+	having 그룹핑결과에대한조건
+	order by 정렬할컬럼명 정렬방법, 정렬할컬럼명 정렬방법;
+	
+	-- 검색조건
+		>> 컬럼명 연산자 값
+		>> 컬럼명 연산자 값 (and | or | not) 컬럼명 연산자 값
+		
+		
+	-- 정렬방법: 
+		>> 올림차순: 기본(asc, 생략)
+		>> 내림차순: desc
+		>> 숫자: 작은숫자 부터
+		>> 문자: a, 가 부터
+		>> 날짜: 숫자동일 (오래된날짜 부터)
+
+## 데이터 타입
+-- 문자열
+	>> 고정문자열: char(길이)	 	name char(10) => "a         " (길이에 맞는 공백문자)
+	>> 가변문자열: varchar(길이) 	name varchar(10) => "a"
+	>> 문자열 비교 시에 데이터 타입에 따른 공백 처리 주의
+	>> 공백 제거 함수: ltrim(), rtrim(), trim()
+	
+-- 숫자
+	>> 정수형: int, int(길이), tinyint, smallint, ...
+	>> 실수형: decimal(M, D), float(), double()
+	
+-- 날짜/시간
+	>> date
+	>> datetime
+	>> timestamp: time zone 정보도 함께 저장
+	>> time
+	
+-- '문자열', '날짜및시간'
+-- 123, 4567.89
+-- `예약어를 식별자로 사용 또는 대소문자을 식별` (mysql만 가능, 권장 X)
