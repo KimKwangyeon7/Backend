@@ -1,0 +1,10 @@
+## RDBMS - 관계형 데이터베이스 시스템
+
+## SQL(Structured Query Language) - 모든 DBMS에서 사용 가능 => 표준 / 쿼리의 대소문자는 구분 X (단, 데이터의 대소문자는 구분)
+c.f 대소문자 구분 -> 1. var binary로 데이터 타입 사용 2. varchar binary 3. binary()
+- 종류: DDL / DML / DCL / TCL
+- DML: CRUD(Create-Insert-POST / Retrieve-Select-GET / Update-Update-PUT / Delete - Delete - DELETE) 
+
+-- ifnull(a, b) -> a가 null이면 b 
+-- 논리연산 주의 (p.30)
+-- escape: like '__#%' escape:'#' 
