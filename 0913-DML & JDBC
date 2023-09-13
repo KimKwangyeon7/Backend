@@ -20,7 +20,92 @@ from dual;
 statement 종류
 - prepared statement
 - callable statement
+----------------------------------------------------------------------------------------------------------------------------
+<0913>
+## JDBC
+-- JAVA + DB 연결 위한 표준 API
+-- java.sql.*: JavaSE
+-- javax.sql.*: JavaEE(Backend: Servlet / Spring)
+-- javax.naming.*: JavaEE(Backend: Servlet / Spring)
 
+## JDBC 어플리케이션 구성요소
+1. RDBMS: mysql
+2. JDBC API: rt.jar(JavaSE 표준 API 포함)
+3. JDBC Driver: RDBMS 벤더가 제공하는 JDBC API에 대한 구현물
+	-- class 묶음: *.jar
+	
+## JDBC 주요 API
+-- java.sql.*
+
+-- DriverManager
+	>> static Connection	getConnection(String url, String user, String password)
+
+-- Connection
+	>> DB 연결 객체
+	>> setAutoCommit(boolean)
+	>> commit()
+	>> rollback()
+
+-- Statement
+	>> 연결된 서버 객체와 sql 전송 위한 빈 통로
+	>> 동적 sql 수행 위한 통로
+	>> sql 문자열 변환 불편, sql-injection 보안 이슈, n/w traffic 가중
+	>> statement stmt = conn.createStatement();
+
+-- PreparedStatement
+	>> 연결된 서버 객체와 sql 전송 위한 특정 sql 전용 통로
+	>> 정적 sql 수행 위한 전용 통로
+	>> Statement 문제(불편) 해결
+	String sql = "insert into ssafy_member values('?', '?', '?')";
+	PreparedStatement pstmt = con.prepareStatement(String sql);
+	// 물음표(?)에 매핑되는 값을 setXxxx(인덱스, 값) 설정해야 함
+	// setString() => 입력 받은 문자열을 'sql-문자열' 자동 변환
+	// setInt()
+	// 인덱스는 1번부터 시작!!!! ************중요**************
+	pstmt.setXxx(1, 값)
+
+	
+-- CallableStatement
+	>> 서버에 저장된 Stored Procedure / Stored Function 호출 위한 통로
+	>> PL/SQL
+	>> CallableStatement cstmt = con.prepareCall(String sql);
+
+-- PreparedStatement: SQL 수행 요청 위한 메서드
+	>> C/U/D: executeUpdate(): int
+	>> R(select): executeQuery(): ResultSet
+	>> 기타 SQL: execute(): boolean
+
+-- ResultSet
+	>> select 결과를 담는 객체와
+	>> next(): booolean => 커서를 이동하는 메서드
+	>> getXxx("컬럼명" | int): xxx 타입
+	>> getMetaData(): ResultSetMetaData
+
+## JDBC 프로그래밍 기본 절차 (흐름)
+1. JDBC Driver 로딩 => (driver) 생성자 => 클래스 분리 설계 (Factory / DBUtil)
+2. DB 연결: Connection => (url, user, password) => 메서드 분리 설계 => 클래스 분리 설계 (Factory / DBUtil)
+
+3. SQL 통로 개설: Statement, PreparedStatement, CallableStatement
+4. SQL 수행요청
+5. SQL 수행결과 처리
+
+6. 자원 해제 => 메서드 분리 설계 => 클래스 분리 설계 (Factory / DBUtil)
+
+## JDBC Resource Property: .properties, .xml => 별도 파일 분리 설계
+1. driver
+2. url
+3. user
+4. password
+
+## JDBC Pattern programming
+1. DTO(Data Transfer Object)
+2. DAO(Data Access Object)
+3. Singleton Pattern
+4. Factory DAO Pattern
+
+## JDBC 개발 위한 순서
+1. DB 구축: 테이블 등 객체 생성(물리적)
+2. DTO: 테이블 당 매핑 설계
 
 
 
