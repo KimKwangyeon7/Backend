@@ -1,0 +1,39 @@
+-- now와  current는 select가 실행되는 시점의 시간, sysdate는 이 함수가 호출되는 시간 
+select now(), sleep(2), current_timestamp(), sleep(5), sysdate()
+from dual;
+
+## mysql Transaction
+- 트랜잭션: 데이터베이스의 상태를 변화시키는 일종의 작업 단위 의미
+- 트랜잭션 도구: start transaction, commit, rollback
+- mysql의 경우 default가 autocommit으로 설정됨
+
+##JDBC (Java Database Connectivity): 자바 프로그래밍 언어로 만들어진 클래스와 인터페이스로 이루어진 API
+
+## JDBC 프로그래밍 개발 순서
+1. Driver class loading
+2. DB 연결 -> Connection 객체 생성
+3. SQL 실행 준비 -> SQL문 작성, Statement(prepared, callable, ) 생성
+4. SQL 실행 -> executeUpdate() ->  
+               executeQuery() -> 
+5. 접속 종료
+
+statement 종류
+- prepared statement
+- callable statement
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
