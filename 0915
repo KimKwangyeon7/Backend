@@ -1,0 +1,90 @@
+Frontend (client)  Backend(server)
+
+Servlet / JS: 1. Parameter get 2. Logic - Businees Locig, DB 처리 3. 결과에 따른 응답 page -> html
+
+______________________________________________________________________________________________________________________________
+## Servlet 역할: MVC Pattern (Model 2 Architecture)
+-- Controller
+-- 요청 ~ 응답 제어 담당
+-- 1. 요청 파악: 로그인, 회원가입, 내정보조회 등 (요청 view: html, jsp, css, js)
+-- 2. 요청 데이터 추출하기
+-- 3. 요청 데이터 검증하기: 필수, 길이, 최소길이, 최대길이, 형식, 숫자
+-- 4. Model에게 요청 의뢰(검증받은데이터 전달)
+-- 5. Model로부터 응답 결과 받아서 응답 위한 설정
+-- 6. 응답 화면 제어(이동하기): 성공, 실패
+	>> forward: 기존 요청 객체, 응답 객체를 들고 페이지 이동
+	>> redirect: 새로운 페이지로 이동(새로운 요청 객체, 응답 객체 생성)
+
+## http 프로토콜 기반의 웹어플리케이션(Servlet)
+1. extends HttpServlet
+2. http method="get | post" 서비스 재정의
+	(1) service(ServletRequest, ServletResponse)
+	(2) service(HttpServletRequest, HttpServletResponse)
+	(3) if (request.getMethod().equals())
+		=> get: doGet(HttpServletRequest, HttpServletResponse
+		=> post: doPost(HttpServletRequest, HttpServletResponse)
+		
+3. 서비스 메서드 재정의 코드
+	(1) 요청 객체에 대한 한글 인코딩: /post 요청 시에 명시적으로 지정해야함!!!
+		request.setCharacterEncoding("utf-8");
+	
+	(2) 요청 데이터 추출하기
+		-- Query String = url?key=value&key2=value
+		-- <form> 입력 항목: name="변수명"
+		-- 단일값 가져오기
+			String data = request.getParameter("name변수명");
+			String[] datas = request.getParameterValues("name변수명");
+			
+		-- 다중값 가져오기: checkbox, <select multiple="multiple">
+			String[] datas = request.getParameterValues("name변수명");
+		
+		-- 왕창 가져오기
+		Map<String,​ String[]>	getParameterMap()
+
+	(3) Model 요청 의뢰
+	
+	(4) Model 요청 응답 결과 받아서 응답 위한 설정
+		-> HttpServletRequest: 요청 ~ 응답 범위 객체
+		-> HttpSession: 로그인 ~ 로그아웃(타임아웃) 범위 객체
+		-> ServletContext: 어플리케이션 시작(서비스) ~ 어플리케이션 종료(서비스 중지)
+		-> setAttribute(K, Object)
+	
+	(5) 응답 페이지 이동하기: 응답페이지(jsp)
+		-> forward
+		-> redirect
+			
+	(6) 서블릿에서 출력스트림을 이용한 응답하기
+		-> 응답 위한 mime-type, encoding 설정
+		response.setContentType("text/html;charset=utf-8");
+		
+		-> 응답 위한 출력스트림 가져오기 
+		PrintWriter out = response.getWriter();
+		
+		-> 출력 스트림을 이용한 동적 페이지 응답하기 
+		out.println("<html>...</html>");
+		
+		-> 출력스트림 자원 해제
+		out.close();
+		
+		
+## Java SE (Standard Edition)
+-- JDK: 자바 개발환경(컴파일러, 실행명령어 등)
+-- JRE: 자바 실행환경(JVM, API-rt.jar)
+
+## Java EE (Enterprise Edition)
+-- Web Application: Java 기반 (Servlet / JSP)		
+-- 실행환경: Container (Servlet Container, JSP Container)
+-- 서비스 환경 구축: 
+	-> WAS (Web Application Server)
+	-> Container (Servlet Container, JSP Container)
+-- Tomcat = WAS + Servlet Container
+-- Container 역할: 
+	>> servlet/jsp 라이프 사이클 제어 (생성, 서비스, 소멸)
+	>> 메모리 관리 
+
+## 서블릿 라이프 사이클 메서드
+1. init(ServletConfig) => init(): 사용자 서블릿 초기화 재정의
+	=> 오류 발생된다면 정상 서비스 가능할까??
+2. service() => doGet() / doPost() -> 요청 시마다 반복 수행되는 서비스 메서드
+
+3. destroy() =>: 자원해제, 기존 서블릿 변경, 서비스 중지 호출 시점
