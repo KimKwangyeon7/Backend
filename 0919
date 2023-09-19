@@ -1,0 +1,58 @@
+http protocol 특성
+connectionless(비 연결성): 요청 ~ 응답하고 나면 연결 끊어버림 -- 장점: 서버 부하 감소, 사용자는 서버에 문제가 생겨도 응답결과에 대해서는 영향받지않음
+stateless(무상태) : 상태정보가 저장되지 않음 -- 단점: 단점 해결!!!(상태정보를 유지하는 방법)
+Session Management
+-- 상태정보를 유지하는 방법
+-- 세션 : 사용자 인증(로그인) ~ 로그아웃(타임아웃)
+-- 상태정보 유지위한 API
+    (1) Cookie
+    (2) HttpSession
+    (3) URL-Rewriting : 이건 개발자가 서비스 안해요!!
+
+    (4) Spring F/W : JWT, OAuth 등
+    
+
+(1) Cookie API
+-- 특징: 세션정보 유지, 문자열만 가능, 크기 및 갯수 제한, 사용자 쿠키 저장 허용해야함
+
+-- 쿠키 객체 생성
+    Cookie c1 = new Cookie("userId", "test01");
+    Cookie c2 = new Cookie("key", "value");
+
+-- 필요시 쿠키에 대한 설정 : 쿠키 유효기간 설정 등(API 참고)
+    setMaxAge​(int expiry);
+
+-- 응답시에 쿠키 함께 전송
+    response.addCookie(c1);
+    response.addCookie(c2);
+
+-- 요청시에 쿠키정보 가져오기
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie c: cookies) {
+            String key = c.getName(); // 쿠키이름
+            String value = c.getValue(); // 쿠키설정값;
+        }
+    }
+
+(2) HttpSession API
+-- 세션객체 생성하기
+    HttpSession session = request.getSession(); // default: true
+    HttpSession session = request.getSession(false);
+
+-- 세션객체 정보 설정하기
+    session.getId() : 세션아이디 조회
+    session.invalidate() : 세션객체 삭제하기
+    session.isNew() : 세션 신규 여부
+    session.setMaxInactiveInterval​(int interval): 세션 유효기간 설정
+    session.setAttribute(K, V) : 세션에 정보 설정
+    session.removeAttribute(K) : 세션은 유지한체 정보만 삭제하기
+
+-- 세션객체 정보 가져오기: 형변환 필요함
+    Object obj = session.getAttribute(K);
+    
+
+(3) URL-Rewriting
+-- 로컬 시스템에 쿠키 정보 저장을 허용하지 않는 사용자를 위한 서비스
+-- url?세션아이디=xxx
+-- 실제 쿠키를 허용하지 않은 해당 서비스를 이용할 수 없게 처리하는 사이트가 대부분임
