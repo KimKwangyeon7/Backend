@@ -1,3 +1,67 @@
+회원관리기능 - 
+회원정보 - 영속성
+회원 객체: 속성 - ~
+회원가입 - 아이디 중복, 휴대폰 인증, 비밀번호 확인, 이메일 중복/인증 => 도메인의 특징에 따라 결정  
+로그인/로그아웃
+아이디 찾기/비밀번호 찾기 - 정보가 맞으면 새로운 비밀번호를 바꾸는 페이지 제공 or random 비밀번호 제공. 실제 실무에서는 기존 비밀번호는 제공 불가. 
+내정보 조회/변경 - 한 화면에서 내 정보를 모아 한번에 수정하기도 가능
+(오래된)비밀번호 변경 - 
+탈퇴 - 해당 정보를 DB에서 영구적으로 삭제? 방법1: flag사용 방법2: 임의탈퇴, 영구탈퇴,... => 이럴 때 속도 위해 목적이 다른 데이터는 분리 - 두개의 DB활용(단일transaction)
+보안, response type (c.f. preparestatement addbatch, executebatch 메서드 찾아보기) / 삭제 시 부모 자식 관계 없애기(제약 빼기)
+
+1. 회원 속성 추출 -> 어떤 정보 관리할지
+
+________________________________________________________________________________________________________
+1. 회원테이블 생성하기
+회원 테이블부터 구조 만들기 + sql
+
+2. 테이블 맵핑
+패키지 구조도 고려하기
+MemberDto => encapsulation, serializable, toString 재정의(선택)
+
+3. 회원가입 요청화면 만들기
+	- 시작페이지->회원가입링크
+	- user/register.jsp
+	- 입력항목에 name이라는 항목이 있는지 확인하고 있다면 어떤 항목인지 (view와 Dto 이름 다른 경우 확인)
+	- name="변수명"
+	- <form method="" action="url-pattern">
+	- url-pattern, url
+
+4. 회원가입 요청 서블릿(Controller) 작성하기
+	- MemberRegisterServlet
+	- @WebServlet("/register")
+	- doPost()
+
+5. 회원가입 서비스 클래스 작성하기 (interface => impl 구현 클래스)
+	- MemberService interface
+	- MemberServiceImpl : 싱글톤
+	- register(MemberDto) : int
+	- 서비스에서 DAO 호출수행결과 controller로 반환
+	
+6. 회원가입 Dao 클래스 작성하기 (interface => impl 구현 클래스)
+	- MemberDao interface
+	- MemberDaoImpl : 싱글톤
+	- register(MemberDto) : int
+	- insertMember(), selectMember, deleteMember() 같은 네이밍 컨벤션 추천
+	
+7. SQL 구문 확인하고
+
+8. Controller 응답 결과 설정하기
+	- Model service 요청 의뢰 결과 받아서 응답 설정하기	
+	- scope: pageContext(기본값), request, session, application
+
+9. Controller 응답 페이지 이동하기
+	- 성공: message 설정, user/login.jsp forward 이동
+	- 실패: 
+		>> 경고창 띄워주고 (오류 메세지 출력) => user/register.jsp
+		>> <scipt>alert(); location.href=""</script>
+
+10. 회원가입 응답화면 결과 보여주기
+	- getAttribute("K"): Object
+
+
+
+
 http protocol 특성
 connectionless(비 연결성): 요청 ~ 응답하고 나면 연결 끊어버림 -- 장점: 서버 부하 감소, 사용자는 서버에 문제가 생겨도 응답결과에 대해서는 영향받지않음
 stateless(무상태) : 상태정보가 저장되지 않음 -- 단점: 단점 해결!!!(상태정보를 유지하는 방법)
