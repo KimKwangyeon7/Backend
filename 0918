@@ -167,14 +167,15 @@ ________________________________________________________________________________
 				contentType="text/html;charser=utf-8"
 				import="java.util.*, com.ssafy.model.MemberDto"
 				errorPage="error처리하는페이지-url" | isErrorPage = "true"
-			%>		
+			%>	
+			+ buffer, autoflush
 			<%@ import="java.util.* %> -> 이렇게 각각 써주는 것을 권장
 		
 		(2) include
-			>> 조각 페이지 삽입
-			>> <%@ include file="조각페이지url" %>
-			>> <jsp:include page = "조각페이지url" />
-			
+			>> 조각 페이지 삽입 
+			>> <%@ include file="조각페이지url" %> (지시어태그) -> 바로
+			>> <jsp:include page = "조각페이지url" /> (액션태그) ->런타임 중에
+			** 액션태그에 param을 이용 동적 가능
 		(3) taglib
 			>> jsl 태그라이브러리 사용 설정
 			>> <%@ taglib uri="" prefix="" %>
