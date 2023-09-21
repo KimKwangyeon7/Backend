@@ -1,0 +1,136 @@
+<0920>
+Maven: 의존 관계 라이브러리를 자동으로 배포 받을 수 있는 자동 소스 프레임워크
+
+서블릿, 제네릭, HTTP 관계 명확히 알 것
+
+WAS의 개념 및 역할 - 비즈니스 로직에만 집중할 수 있도록
+
+컨테이너 - 실행환경, 객체 생성, 제거 등 -> 라이프사이클 관리
+
+서블릿 라이프사이클 메서드
+최초 요청 - 서블릿 리퀘스트 -> 서블릿리스폰스
+- init 
+- doPost 
+- doGet
+- destroy
+오류 코드- 403, 403, 405, 500 
+
+
+요청, 응답 시에 따른 메서드들 정리
+
+request.getParameter(name) - 단일값
+request.getParameterValues - 1~N
+request.getParameterMap - 
+request.getParameterName
+
+
+response.setContentType(text/~
+
+PrintWriter out
+out.print~
+____________________________________________
+
+HttpSession - interface, object(데이터타입제약X),크기갯수제한X
+요청 시에 request.getSession - true가 default - 세션이 없으면 생성 / false는 세션 없으면 null
+setMaxAgeInterval
+invalidate
+
+
+Cookie - class, String, 크기나갯수제한, sessionId가 저장됨
+쿠키객체생성 -> 응답 시에 전송. response.addCookie -> 요청 시에 request.getCookies - 배열타입 반환
+
+
+____________________________________________
+java code 안에 view => 역할 나누기 위한 JSP 사용
+동적인 view
+html, css, javascript + jsp tag
+
+1. 주석태그
+(1)
+	<!-- HTML 주석: 응답 시에 전달됨, 따라서 사용자 소스 보기 가능 -->
+
+(2) hello.jsp => (jsp 컨테이너) => hello_jsp.java 변환 시에 포함되는 주석	
+	<% // 자바 한줄 주석 %>
+	<% /* 자바 여러줄 주석 %>
+	
+(3)	hello.jsp => (jsp 컨테이너) => hello_jsp.java 변환 시에 포함되지 않는 주석 => 개발자만 보는 주석
+	<%-- JSP 주석 --%>
+
+
+_____________________________________________________________________________
+<Backend 정리노트>
+
+## JDBC 프로그래밍 개발 순서
+1. Driver Class Loading => (driver) 생성자 => 클래스 분리 설계 (Factory / DBUtil)
+2. DB 연결 -> Connection 객체 생성
+3. SQL 실행 준비 -> SQL문 작성, Statement(prepare, callable) 생성
+4. SQL 실행 -> executeUpdate(): C, U, D / int
+			  executeQuery(): R(select) / ResultSet
+5. SQL 수행결과 처리
+6. 자원 해제 => 메서드 분리 설계 => 클래스 분리 설계 (Factory / DBUtil)
+
+## JDBC Pattern programming
+1. DTO
+2. DAO
+3. Singleton Pattern
+4. Factory DAO Pattern
+
+## Servlet 역할: MVC Pattern
+	-- Controller: 요청~응답 제어 담당
+		>> 1. 요청 파악
+		>> 2. 요청 데이터 추출
+		>> 3. 요청 데이터 검증
+		>> 4. Model에게 요청 의뢰
+		>> 5. Model로부터 응답 결과 받아서 응답 위한 설정
+		>> 6. 응답 화면 제어(이동): 성공 / 실패
+			>> forward: 기존 요청 객체, 응답 객체를 들고 페이지 이동
+			>> redirect: 새로운 페이지로 이동(새로운 요청 객체, 응답 객체 생성)
+		
+## http 프로토콜 기반의 웹어플리케이션 (Servlet)
+1. extends HttpServlet
+2. Http method="get | post" 서비스 재정의
+	(1) service(ServletRequest, ServletResponse)
+	(2) service(HttpServletRequest, HttpServletResponse)
+	(3) if (request.getMethod().equals())
+
+JSP 개념 및 구성요소, 표준태그
+
+
+jsp 서비스가 java로 변환될 때 _jspService(): expression, sriptlet 태그에ㅓㅅ만 사용가능 -> 내장객체
+
+
+
+
+_____________________________________________________________________
+<0920>
+## 조각 페이지
+-- 페이지 레이아웃 구성 시에 공통적인 화면을 부분으로 분리 설계
+-- 재활용, 유지보수 편리
+
+1. 지시어 태그
+-- <%@ include file="조각페이지url" %> 
+-- jsp 페이지가 java 코드 변환 시에 조각코드 삽입
+
+2. 액션 태그
+-- (1) <jsp:include page="조각페이지url" />
+-- (2) <jsp:include page="조각페이지url" />
+			<jsp:param name="key" value="값" />
+			<jsp:param name="key" value="값" />
+		<jsp:include>
+-- jsp 실행(runtime) 시점에 삽입
+
+## 조각페이지 레이아웃 설계
+
+
+property - server - 톰캣 - zulu로 
+import 방법 -> 1.zip파일 한번에 2. 프로젝트 만들고 import
+DBUtil에서 DB 확인 기존 테이블명과 동일한지 여부도 확인
+
+
+로그인, 로그아웃, 상품에대한 CRUD
+
+dto -> dao + impl -> CRUD
+
+
+
+dto dao jsp (뷰페이지에서 name 속성추가하기) 로그인 로그아웃 -> nav에서 처리
