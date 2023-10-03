@@ -1,0 +1,90 @@
+JDBC – Java + DB를 연결 위한 표준 API
+- 어플리케이션 구성요소: RDBMS(mySql), API, Driver
+- 주요 API: Connection, Statement ( 둘다 인터페이스)
+
+Connection: DB 연결 객체
+
+동적 SQL: 프로그램이 실행하고 난 후 결정이 나는 것 
+* statement와 prepared 차이: 
+statement는 쿼리문에 값이 미리 입력돼 있어야 함 => 정적인 쿼리문 처리
+prepared는 SQL문장이 미리 컴파일 되고 실행시간동안 인수 값을 위한 공간을 확보할 수 있다는 점에서(동적 쿼리문 처리 가능) 다름
+=> 캐시 사용 유무가 가장 큰 차이점: SQL문을 실행할 때마다 SQL을 매번 구문으로 새로 작성하고 새로 해석해야 하므로 오버헤드 존재 / prepared는 미리 SQL문을 준비해 놓고 바인딩 변수 (? 연산자)를 사용해서 반복되는 비슷한 SQL문을 쉽게 처리
+즉, 동일한 SQL문장이 여러 번 반복적으로 수행될 때 사용되는 객체
+
+# PreparedStatement 
+1. executeQuery(): select 구문 처리할 때 사용함. 반환타입: ResultSet
+2. executeUpdate(): DML(update, insert, delete) 등의 SQL 수행 시 사용함. 반환타입: int
+
+# ResultSet: 쿼리에 대한 결과값 처리. 
+- ResultSet 객체의 커서는 첫번째 레코드보다 바로 이전을 가리킴
+- next(): 커서 이동
+- getXXX(index | name): 데이터 얻기
+
+
+# JDBC 개발 순서
+1. 드라이버 로딩: driver(생성자)
+2. DB 연결: Connection
+3. SQL 통로 개설: Statement(Preapared)
+4. SQL 수행 요청 
+5. SQL 수행 결과 처리
+6. 자원해제
+
+# 싱글톤 패턴: 객체의 인스턴스가 단 1개만 생성되는 패턴
+- 사용 이유: 고정된 메모리 영역 => 메모리 낭비 방지 
+	+ 이미 생성된 인스턴스 사용 => 속도에도 이점
+	+ 다른 클래스 간 데이터 공유 쉬움
+
+# Servlet 역할: MVC Pattern 
+- controller
+- 요청~응답 제어 담당
+1. 요청 파악: 로그인, 회원가입 등
+2. 요청 데이터 추출하기:
+1) Query String: url?key1=value1&kye2=value2
+	2) <form> 입력 항목: name=”변수명”
+3) 단일값 가져오기: request.getParameter(“name변수명”)
+4) 다중값 가져오기: request.getParameterValues(“name변수명”)
+5) 왕창 가져오기: Map<String, String[]>  request.getParameterMap() 
+3. 요청 데이터 검증하기
+4. Model에게 요청 의뢰
+5. Model으로부터 응답 결과 받아서 응답 위한 설정
+- HttpServletRequest: 요청 ~ 응답 범위 객체
+- HttpSession: 로그인 ~ 로그아웃(타임아웃) 범위 객체
+- ServletContext: 어플리케이션 시작(서비스) ~ 어플리케이션 종료(서비스중지)
+- setAttribute(K, Object)
+6. 응답 화면 제어(이동하기): 성공, 실패 
+- forward(기존의 요청, 응답 객체 들고 페이지 이동) 
+- redirect(새로운 요청, 응답 객체 생성)
+
+# Servlet life cycle – 객체의 생성부터 사용(method call)의 주체가 servlet(main method가 없기 때문)
+1. init(): 사용자 서블릿 초기화 재정의 
+2. service(): doGet() / doPost() -> 요청 시마다 반복 수행되는 서비스 메서드
+3. destroy(): 자원해제, 기존 서블릿 변경, 서비스 중지 호출 시점
+
+# get과 post 방식 비교
+- get: 전송되는 데이터가 url 뒤에 Query String으로 전달됨 => 보안 문제 / 간단한 데이터를 빠르게 전송 / 데이터 양(길이)에 제한 있음
+- post: url과는 별도로 전송 => 최소한의 보안 유지 효과/ HTTP header 뒤 body에 입력 스트림 데이터로 전달 / 데이터의 제한 없음 / 전달 데이터의 양이 같을 때 get보다 느림
++ post 요청 시에는 servlet에서 명시적으로 한글 인코딩 필요!(request.setCharacterEncoding(“utf-8”)
+
+# Query String
+http://www.ssafy.com/good.jsp?parameter1=value1&parameter2=value2
+=> ? 이후부터 쿼리 스트링 시작 / &는 쿼리 스트링 구분자
+
+# JSP (Java Server Pages): HTML 코드에 자바 코드를 넣어 동적 웹페이지를 생성하는 웹어플리케이션 도구
+- 선언부: <%! %>
+- 처리부(scriptlet): <% %>
+- 출력부: <%= %>
+
+# JSP 표준 태그
+1. 주석 태그: HTML 주석, JAVA 주석, JSP 주석
+2. Directive Tag: page, include, taglib
+3. Declaration Tag
+4. Expression Tag(수행문에 세미콜론 금지)
+5. Scriptlet Tag 
+
+# JSP life cycle
+
+# JSP 내장객체
+
+# 동적으로 attribute 설정하기/가져오기/삭제하기
+
+# 쿠키와 세션의 차이
